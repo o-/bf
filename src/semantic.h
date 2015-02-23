@@ -12,10 +12,10 @@ using namespace std;
   unsigned char data[1000] = {0};       \
   unsigned char * ptr      = data + 500
 
-#define S_PLUS  (*ptr)++
-#define S_MINUS (*ptr)--
-#define S_LEFT  ptr--
-#define S_RIGHT ptr++
+#define S_PLUS  ++(*ptr)
+#define S_MINUS --(*ptr)
+#define S_LEFT  --ptr
+#define S_RIGHT ++ptr
 #define S_DOT   std::cout << *ptr; std::cout.flush()
 #define S_TEST  *ptr != 0
 
