@@ -42,6 +42,9 @@ class Parser {
         case '.':
           cur = cur->next(Dot::New(alloc));
           break;
+        case ',':
+          cur = cur->next(Read::New(alloc));
+          break;
         case '[': {
           Test      * test = Test::New(alloc);
           LoopStart * head = LoopStart::New(alloc);

@@ -22,6 +22,7 @@ class InterpretSemantic : public Semantic {
   void left(Left * p, Visitor * v)   { S_LEFT;  }
   void right(Right * p, Visitor * v) { S_RIGHT; }
   void dot(Dot * p, Visitor * v)     { S_DOT;   }
+  void read(Read * p, Visitor * v)   { S_READ;  }
 
   void test(Test * p, Visitor * v) {
     if (S_TEST) {
@@ -52,6 +53,7 @@ class CompileSemantic : public Semantic {
   void left(Left * p, Visitor * v)   { cout << ST(S_LEFT;);       }
   void right(Right * p, Visitor * v) { cout << ST(S_RIGHT;);      }
   void dot(Dot * p, Visitor * v)     { cout << ST(S_DOT;);        }
+  void read(Read * p, Visitor * v)   { cout << ST(S_READ;);       }
 
   void test(Test * p, Visitor * v) {
     cout << "while(" << ST(S_TEST) << "){";

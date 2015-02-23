@@ -34,6 +34,9 @@ class BytecodeInterpreter {
         case Bytecode::DOT:
           S_DOT;
           break;
+        case Bytecode::READ:
+          S_READ;
+          break;
         case Bytecode::BACK_JUMP:
           bc -= readJmpTarget(bc);
           break;
@@ -94,6 +97,9 @@ class ThreadedBytecodeInterpreter {
           case Bytecode::DOT:
             threaded_code[pc] = &&DOT_OP;
             break;
+          case Bytecode::READ:
+            threaded_code[pc] = &&READ_OP;
+            break;
           case Bytecode::BACK_JUMP:
             threaded_code[pc]   = &&BACK_JUMP_OP;
             threaded_code[pc+1] =
@@ -140,6 +146,10 @@ class ThreadedBytecodeInterpreter {
 
       DOT_OP:
         S_DOT;
+        NEXT();
+
+      READ_OP:
+        S_READ;
         NEXT();
 
       BACK_JUMP_OP:

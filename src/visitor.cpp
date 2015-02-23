@@ -51,4 +51,9 @@ void Visitor::visitTest(Test * p) {
   semantic->test(p, this);
 }
 
+void Visitor::visitRead(Read * r) {
+  semantic->read(r, this);
+  visit.push(r->next());
+}
+
 }

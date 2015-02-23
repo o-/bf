@@ -18,6 +18,7 @@ class Visitor;
  V(Left)                 \
  V(Right)                \
  V(Dot)                  \
+ V(Read)                 \
  V(Start)                \
  V(LoopStart)            \
  V(End)                  \
@@ -117,6 +118,11 @@ class Right : public SequentialNodeTemplate<'>'> {
 class Dot : public SequentialNodeTemplate<'.'> {
  public:
   VisitConstructor(Dot);
+};
+
+class Read : public SequentialNodeTemplate<','> {
+ public:
+  VisitConstructor(Read);
 };
 
 }

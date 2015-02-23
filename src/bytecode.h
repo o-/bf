@@ -16,9 +16,10 @@ typedef uint32_t pc_t;
  V(LEFT,  3) \
  V(RIGHT, 4) \
  V(DOT,   5) \
- V(COND_JUMP, 6) \
- V(BACK_JUMP, 7) \
- V(RETURN, 8)
+ V(READ,  6) \
+ V(COND_JUMP, 7) \
+ V(BACK_JUMP, 8) \
+ V(RETURN, 9)
 
 enum class Bytecode : bytecode_t {
 #define DEF_BYTECODE(n, i) n = i,
@@ -48,6 +49,7 @@ class BytecodeCompileSemantic : public Semantic {
   void left(Left * p, Visitor * v)   { put(Bytecode::LEFT);   }
   void right(Right * p, Visitor * v) { put(Bytecode::RIGHT);  }
   void dot(Dot * p, Visitor * v)     { put(Bytecode::DOT);    }
+  void read(Read * p, Visitor * v)   { put(Bytecode::READ);   }
 
   void test(Test * p, Visitor * v) {
     putBranch();
