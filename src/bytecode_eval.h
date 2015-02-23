@@ -113,47 +113,60 @@ class ThreadedBytecodeInterpreter {
       } while(b != Bytecode::RETURN);
     }
 
-    /* Execute Threaded Code */
+    { /* Execute Threaded Code */
 
-    void ** _pc = threaded_code;
+      register void ** _pc = threaded_code;
 
-#define NEXT() goto **(_pc++)
-    NEXT();
+#define NEXT() _pc++; goto **(_pc-1)
 
+#define __FENCE __asm__ __volatile__ ("nop");
+
+__FENCE
+      NEXT();
+
+__FENCE
 PLUS_OP:
-    S_PLUS;
-    NEXT();
+      S_PLUS;
+      NEXT();
 
+__FENCE
 MINUS_OP:
-    S_MINUS;
-    NEXT();
+      S_MINUS;
+      NEXT();
 
+__FENCE
 LEFT_OP:
-    S_LEFT;
-    NEXT();
+      S_LEFT;
+      NEXT();
 
+__FENCE
 RIGHT_OP:
-    S_RIGHT;
-    NEXT();
+      S_RIGHT;
+      NEXT();
 
+__FENCE
 DOT_OP:
-    S_DOT;
-    NEXT();
+      S_DOT;
+      NEXT();
 
+__FENCE
 BACK_JUMP_OP:
-    _pc -= readJmpTarget(_pc);
-    NEXT();
+      _pc -= readJmpTarget(_pc);
+      NEXT();
 
+__FENCE
 COND_JUMP_OP:
-    if (S_TEST) {
-      _pc += LabelSize;
-    } else {
-      _pc += readJmpTarget(_pc);
-    }
-    NEXT();
+      if (S_TEST) {
+        _pc += LabelSize;
+      } else {
+        _pc += readJmpTarget(_pc);
+      }
+      NEXT();
 
+__FENCE
 RETURN_OP:
-    return;
+      return;
+    }
   }
 
   Constrtuctor1(ThreadedBytecodeInterpreter)
