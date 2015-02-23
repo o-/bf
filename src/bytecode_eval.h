@@ -14,6 +14,7 @@ class BytecodeInterpreter {
 
  public:
   void eval(bytecode_t * bc) {
+
     while (true) {
       Bytecode b = static_cast<Bytecode>(*(bc++));
 
@@ -55,7 +56,6 @@ class BytecodeInterpreter {
 };
 
 
-
 class ThreadedBytecodeInterpreter {
   void * threaded_code[50000];
 
@@ -65,7 +65,7 @@ class ThreadedBytecodeInterpreter {
     return * reinterpret_cast<label_t*>(pc);
   }
 
-  inline label_t readJmpTarget(bytecode_t * bc) {
+  label_t readJmpTarget(bytecode_t * bc) {
     return * reinterpret_cast<label_t*>(bc);
   }
 
@@ -74,6 +74,7 @@ class ThreadedBytecodeInterpreter {
     { /* Translate Bytecode to Threaded Code */
       unsigned int pc = 0;
       Bytecode b;
+
       do {
         b = static_cast<Bytecode>(bc[pc]);
 
@@ -115,57 +116,48 @@ class ThreadedBytecodeInterpreter {
 
     { /* Execute Threaded Code */
 
-      register void ** _pc = threaded_code;
-
 #define NEXT() _pc++; goto **(_pc-1)
 
-#define __FENCE __asm__ __volatile__ ("nop");
+      void ** _pc = threaded_code;
 
-__FENCE
       NEXT();
 
-__FENCE
-PLUS_OP:
-      S_PLUS;
-      NEXT();
+      PLUS_OP:
+        S_PLUS;
+        NEXT();
 
-__FENCE
-MINUS_OP:
-      S_MINUS;
-      NEXT();
+      MINUS_OP:
+        S_MINUS;
+        NEXT();
 
-__FENCE
-LEFT_OP:
-      S_LEFT;
-      NEXT();
+      LEFT_OP:
+        S_LEFT;
+        NEXT();
 
-__FENCE
-RIGHT_OP:
-      S_RIGHT;
-      NEXT();
+      RIGHT_OP:
+        S_RIGHT;
+        NEXT();
 
-__FENCE
-DOT_OP:
-      S_DOT;
-      NEXT();
+      DOT_OP:
+        S_DOT;
+        NEXT();
 
-__FENCE
-BACK_JUMP_OP:
-      _pc -= readJmpTarget(_pc);
-      NEXT();
+      BACK_JUMP_OP:
+        _pc -= readJmpTarget(_pc);
+        NEXT();
 
-__FENCE
-COND_JUMP_OP:
-      if (S_TEST) {
-        _pc += LabelSize;
-      } else {
-        _pc += readJmpTarget(_pc);
-      }
-      NEXT();
+      COND_JUMP_OP:
+        if (S_TEST) {
+          _pc += LabelSize;
+        } else {
+          _pc += readJmpTarget(_pc);
+        }
+        NEXT();
 
-__FENCE
-RETURN_OP:
-      return;
+      RETURN_OP:
+        return;
+
+#undef NEXT
     }
   }
 

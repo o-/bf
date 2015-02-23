@@ -10,15 +10,19 @@ typedef uint32_t pc_t;
 #define LabelSize (sizeof(label_t) / sizeof(bytecode_t))
 
 
+#define BYTECODE_LIST(V) \
+ V(PLUS,  1) \
+ V(MINUS, 2) \
+ V(LEFT,  3) \
+ V(RIGHT, 4) \
+ V(DOT,   5) \
+ V(COND_JUMP, 6) \
+ V(BACK_JUMP, 7) \
+ V(RETURN, 8)
+
 enum class Bytecode : bytecode_t {
-  PLUS      = 1,
-  MINUS     = 2,
-  LEFT      = 3,
-  RIGHT     = 4,
-  DOT       = 5,
-  COND_JUMP = 6,
-  BACK_JUMP = 7,
-  RETURN    = 8
+#define DEF_BYTECODE(n, i) n = i,
+  BYTECODE_LIST(DEF_BYTECODE)
 };
 
 
