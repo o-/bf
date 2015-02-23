@@ -11,8 +11,8 @@ using namespace std;
 
 /* BF semantics */
 
-#define INIT_STORAGE                    \
-  unsigned char data[1000] = {0};       \
+#define INIT_STORAGE                       \
+  unsigned char data[1000000] = {0};       \
   unsigned char * ptr      = data + 500
 
 #define S_PLUS  ++(*ptr)

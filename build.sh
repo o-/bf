@@ -30,3 +30,10 @@ diff out/hello_tbc.txt test/hello.result
 g++ -O3 out/interpreter.cpp -o out/interpreter
 out/interpreter < test/hello.bf > out/hello_comp.txt
 diff out/hello_comp.txt test/hello.result
+
+
+./bin/bf e test/interpreter.bf < test/interpreter.bf < test/interpreter.bf < test/hello.bf > out/hello_eval.txt
+diff out/hello_eval.txt test/hello.result
+
+./bin/bf t test/interpreter.bf < test/interpreter.bf < test/interpreter.bf < test/interpreter.bf < test/hello.bf > out/hello_tbc.txt
+diff out/hello_tbc.txt test/hello.result
