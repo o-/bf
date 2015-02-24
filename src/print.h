@@ -42,6 +42,7 @@ class PrintSemantic : public Semantic {
   void read(Read * p, Visitor * v) {
     br(); cout << ',';
   }
+  void store(char) { }
   void test(Test * p, Visitor * v) {
     _line = 0;
     cout << endl << indent() << '[';

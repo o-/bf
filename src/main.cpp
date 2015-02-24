@@ -29,6 +29,17 @@ int main(int argc, char * argv[]) {
         case 't':
           s = bcc = BytecodeCompileSemantic::New(zone);
           break;
+        case 'x':
+          bcc = BytecodeCompileSemantic::New(zone);
+          s = TraceCompileSemantic::New(
+                        zone,
+                        InterpretSemantic::New(zone),
+                        bcc);
+          break;
+        case 'y': s = TraceCompileSemantic::New(
+                        zone,
+                        InterpretSemantic::New(zone),
+                        CompileSemantic::New(zone)); break;
         default : goto fail;
       }
 

@@ -14,6 +14,8 @@ using namespace std;
 /* eval AST */
 
 class InterpretSemantic : public Semantic {
+  friend class TraceCompileSemantic;
+
   INIT_STORAGE;
 
  public:
@@ -23,6 +25,9 @@ class InterpretSemantic : public Semantic {
   void right(Right * p, Visitor * v) { S_RIGHT; }
   void dot(Dot * p, Visitor * v)     { S_DOT;   }
   void read(Read * p, Visitor * v)   { S_READ;  }
+  void store(char value) {
+    S_STORE (value);
+  }
 
   void test(Test * p, Visitor * v) {
     if (S_TEST) {
@@ -54,6 +59,9 @@ class CompileSemantic : public Semantic {
   void right(Right * p, Visitor * v) { cout << ST(S_RIGHT;);      }
   void dot(Dot * p, Visitor * v)     { cout << ST(S_DOT;);        }
   void read(Read * p, Visitor * v)   { cout << ST(S_READ;);       }
+  void store(char value) {
+    cout << ST(S_STORE) << (int)value << ";";
+  }
 
   void test(Test * p, Visitor * v) {
     cout << "while(" << ST(S_TEST) << "){";

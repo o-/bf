@@ -37,6 +37,9 @@ class BytecodeInterpreter {
         case Bytecode::READ:
           S_READ;
           break;
+        case Bytecode::SET:
+          S_STORE (*(bc++));
+          break;
         case Bytecode::BACK_JUMP:
           bc -= readJmpTarget(bc);
           break;
@@ -60,7 +63,8 @@ class BytecodeInterpreter {
 
 
 class ThreadedBytecodeInterpreter {
-  void * threaded_code[50000];
+  static const int buffer_len = 50000000;
+  void * threaded_code[buffer_len];
 
   INIT_STORAGE;
 
@@ -79,6 +83,8 @@ class ThreadedBytecodeInterpreter {
       Bytecode b;
 
       do {
+        if (pc >= buffer_len) __asm("int3");
+
         b = static_cast<Bytecode>(bc[pc]);
 
         switch(b) {
@@ -99,6 +105,11 @@ class ThreadedBytecodeInterpreter {
             break;
           case Bytecode::READ:
             threaded_code[pc] = &&READ_OP;
+            break;
+          case Bytecode::SET:
+            threaded_code[pc]   = &&SET_OP;
+            threaded_code[pc+1] = reinterpret_cast<void*>(bc[pc+1]);
+            pc++;
             break;
           case Bytecode::BACK_JUMP:
             threaded_code[pc]   = &&BACK_JUMP_OP;
@@ -123,6 +134,7 @@ class ThreadedBytecodeInterpreter {
     { /* Execute Threaded Code */
 
 #define NEXT() _pc++; goto **(_pc-1)
+#define GETOP() *reinterpret_cast<char*>(_pc++)
 
       void ** _pc = threaded_code;
 
@@ -150,6 +162,10 @@ class ThreadedBytecodeInterpreter {
 
       READ_OP:
         S_READ;
+        NEXT();
+
+      SET_OP:
+        S_STORE (GETOP());
         NEXT();
 
       BACK_JUMP_OP:

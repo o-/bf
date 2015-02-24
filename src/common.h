@@ -15,4 +15,12 @@
     return toAlloc;                                      \
   }                                                      \
 
+#define Constrtuctor3(ClassName, ArgClass, Arg2Class)    \
+  static ClassName * New(Allocator & a, ArgClass arg,    \
+                                        Arg2Class arg2) {\
+    ClassName * toAlloc;                                 \
+    a.New(&toAlloc, arg, arg2);                          \
+    return toAlloc;                                      \
+  }                                                      \
+
 #endif

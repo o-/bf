@@ -4,6 +4,7 @@
 #include "parser.h"
 #include "visitor.h"
 #include "eval.h"
+#include "meta_eval.h"
 #include "bytecode.h"
 #include "bytecode_eval.h"
 #include "print.h"

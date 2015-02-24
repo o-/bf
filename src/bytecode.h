@@ -17,9 +17,10 @@ typedef uint32_t pc_t;
  V(RIGHT, 4) \
  V(DOT,   5) \
  V(READ,  6) \
- V(COND_JUMP, 7) \
- V(BACK_JUMP, 8) \
- V(RETURN, 9)
+ V(SET,   7) \
+ V(COND_JUMP, 8) \
+ V(BACK_JUMP, 9) \
+ V(RETURN, 10)
 
 enum class Bytecode : bytecode_t {
 #define DEF_BYTECODE(n, i) n = i,
@@ -28,10 +29,17 @@ enum class Bytecode : bytecode_t {
 
 
 class BytecodeCompileSemantic : public Semantic {
-  bytecode_t code_buffer[500000] = {0};
+  static const int buffer_len = 50000000;
+  bytecode_t code_buffer[buffer_len] = {0};
   pc_t pc = 0;
 
   void put(Bytecode byte) {
+    if (pc >= buffer_len) __asm("int3");
+    code_buffer[pc++] = static_cast<bytecode_t>(byte);
+  }
+
+  void put(char byte) {
+    if (pc >= buffer_len) __asm("int3");
     code_buffer[pc++] = static_cast<bytecode_t>(byte);
   }
 
@@ -50,6 +58,10 @@ class BytecodeCompileSemantic : public Semantic {
   void right(Right * p, Visitor * v) { put(Bytecode::RIGHT);  }
   void dot(Dot * p, Visitor * v)     { put(Bytecode::DOT);    }
   void read(Read * p, Visitor * v)   { put(Bytecode::READ);   }
+  void store(char value)    {
+    put(Bytecode::SET);
+    put(value);
+  }
 
   void test(Test * p, Visitor * v) {
     putBranch();

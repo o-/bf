@@ -27,6 +27,14 @@ class Allocator {
     *toAllocate = n;
   }
 
+  template<typename Object, typename Arg, typename Arg2>
+  void New(Object ** toAllocate, Arg arg, Arg2 arg2) {
+    void   * m = malloc(sizeof(Object));
+    Object * n = new (m) Object(arg, arg2);
+    objects.push(n);
+    *toAllocate = n;
+  }
+
   ~Allocator() {
     while (objects.size() > 0) {
       free(objects.top());
