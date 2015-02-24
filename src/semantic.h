@@ -13,14 +13,14 @@ using namespace std;
 
 #define INIT_STORAGE                       \
   unsigned char data[1000000] = {0};       \
-  unsigned char * ptr      = data + 500
+  unsigned char * ptr         = data + 500
 
 #define S_PLUS  ++(*ptr)
 #define S_MINUS --(*ptr)
 #define S_LEFT  --ptr
 #define S_RIGHT ++ptr
 #define S_DOT   std::cout << *ptr; std::cout.flush()
-#define S_READ  std::cin >> noskipws >> *ptr
+#define S_READ  std::cin >> std::noskipws >> *ptr
 #define S_TEST  *ptr != 0
 
 #define S_STORE *ptr =

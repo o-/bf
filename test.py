@@ -49,12 +49,12 @@ print("Testing execution of meta-interpreter")
 interpreter_hello_call = "./bin/bf %s test/interpreter.bf < test/hello.bf > out/out.txt"
 test_3(interpreter_hello_call)
 
+generic_call = "./bin/bf %s %s < %s > %s"
+
 print("")
 print("Testing partial evaluation")
 
 test_3(interpreter_hello_call, ["y"])
-
-generic_call = "./bin/bf %s %s < %s > %s"
 
 run(generic_call % ("x", "test/interpreter.bf", "test/hello.bf", "out/out.bf"))
 run(generic_call % ("t", "out/out.bf", "/dev/null", "out/out.txt"))
@@ -89,3 +89,7 @@ exp()
 run(generic_call % ("t", "out/metacat.bf", "test/hello.result", "out/out.txt"))
 exp()
 
+run(generic_call % ("z", "test/interpreter.bf", "test/cat.bf", "out/metacat.cpp"))
+run("g++ out/metacat.cpp -o out/out")
+run("out/out < test/hello.result > out/out.txt")
+exp()
