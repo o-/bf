@@ -40,6 +40,10 @@ int main(int argc, char * argv[]) {
                         zone,
                         InterpretSemantic::New(zone),
                         CompileSemantic::New(zone)); break;
+        case 'z': s = TraceCompileSemantic::New(
+                        zone,
+                        InterpretSemantic::New(zone),
+                        PrintSemantic::New(zone)); break;
         default : goto fail;
       }
 

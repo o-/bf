@@ -3,6 +3,8 @@
 
 namespace BF {
 
+#include <stack>
+
 #include "semantic.h"
 #include "eval.h"
 
@@ -24,14 +26,31 @@ class TraceCompileSemantic : public Semantic {
   void right(Right * p, Visitor * v) { c->right(p, v);  i->right(p, v); }
   void dot(Dot * p, Visitor * v)     { c->dot(p, v);    }
 
-  void test(Test * p, Visitor * v)   { i->test(p, v);    }
+  stack<Semantic*> order;
+  void test(Test * p, Visitor * v) {
+    if (cin.eof()) {
+      c->test(p, v);
+      order.push(c);
+    } else {
+      i->test(p, v);
+      order.push(i);
+    }
+  }
 
-  void loopEnd(LoopEnd * e, Visitor * v) { i->loopEnd(e, v); }
+  void loopEnd(LoopEnd * e, Visitor * v) {
+    Semantic * s = order.top();
+    order.pop();
+    s->loopEnd(e, v);
+  }
 
   void read(Read * p, Visitor * v)   {
-    char in;
-    cin >> in;
-    store(in);
+    if (cin.eof()) {
+      c->read(p, v);
+    } else {
+      char in;
+      cin >> in;
+      store(in);
+    }
   }
 
   void store(char value) {
