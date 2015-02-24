@@ -29,18 +29,18 @@ int main(int argc, char * argv[]) {
         case 't':
           s = bcc = BytecodeCompileSemantic::New(zone);
           break;
-        case 'x':
+        case 'y':
           bcc = BytecodeCompileSemantic::New(zone);
           s = TraceCompileSemantic::New(
                         zone,
                         InterpretSemantic::New(zone),
                         bcc);
           break;
-        case 'y': s = TraceCompileSemantic::New(
+        case 'z': s = TraceCompileSemantic::New(
                         zone,
                         InterpretSemantic::New(zone),
                         CompileSemantic::New(zone)); break;
-        case 'z': s = TraceCompileSemantic::New(
+        case 'x': s = TraceCompileSemantic::New(
                         zone,
                         InterpretSemantic::New(zone),
                         PrintSemantic::New(zone)); break;
@@ -62,6 +62,21 @@ int main(int argc, char * argv[]) {
   }
 
 fail:
-  cout << "usage: " << argv[0] << " [p|c|e|b] input.bf" << endl;
+  cout << "usage: " << argv[0] << " [p|c|e|b|t|x|y|z] input.bf" << endl
+       << endl
+       << "Supported modes:"   << endl
+       << endl
+       << "    p   Pretty Print" << endl
+       << endl
+       << "    e   AST Interpreter"      << endl
+       << "    b   Compile to Bytecode -> run Bytecode Interpreter" << endl
+       << "    t   Compile to Bytecode -> run Threaded Bytecode Interpreter" << endl
+       << endl
+       << "    c   Compile to C++" << endl
+       << endl
+       << "    x   Partially evaluate until EOF then 'p'" << endl
+       << "    y   Partially evaluate until EOF then 't'" << endl
+       << "    z   Partially evaluate until EOF then 'c'" << endl
+       << endl;
   return 0;
 }
