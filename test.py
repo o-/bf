@@ -8,7 +8,7 @@ def exp(expected = 'test/hello.result'):
     b = open('out/out.txt').read().rstrip('\n')
 
     #TODO: Not sure why this happens with metacat
-    if (ord(b[0]) == 0):
+    while (ord(b[0]) == 0):
         b = b[1:]
 
     if not a == b:

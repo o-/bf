@@ -18,8 +18,9 @@ class TraceCompileSemantic : public Semantic {
   TraceCompileSemantic(Semantic * interpret,
                        Semantic * compile) : i(interpret), c(compile) {}
 
+  bool _known = true;
   bool known() {
-    return !cin.eof();
+    return _known;
   }
 
   void start(Start * p, Visitor * v) {
@@ -72,8 +73,13 @@ class TraceCompileSemantic : public Semantic {
     s->loopEnd(e, v);
   }
 
+  bool sawEOF = false;
   void read(Read * p, Visitor * v)   {
     if (known()) {
+      if (cin.eof()) {
+        _known = !sawEOF;
+        sawEOF = true;
+      }
       char in;
       cin >> in;
       store(in);
