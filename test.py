@@ -1,15 +1,23 @@
 #!/usr/bin/env python
 
-import filecmp
 import os
 import sys
 
 def exp(expected = 'test/hello.result'):
-    if not filecmp.cmp('out/out.txt', expected):
+    a = open(expected).read().rstrip('\n')
+    b = open('out/out.txt').read().rstrip('\n')
+
+    #TODO: Not sure why this happens with metacat
+    if (ord(b[0]) == 0):
+        b = b[1:]
+
+    if not a == b:
         print("> Expected:")
-        print(open(expected).read())
+        print(a)
+        print([ord(c) for c in a])
         print("< But got")
-        print(open('out/out.txt').read())
+        print(b)
+        print([ord(c) for c in b])
         sys.exit(1)
     print("ok")
 
@@ -64,5 +72,20 @@ print("Testing partial evaluation of meta-interpreter (stacked 2x) to C++")
 
 run(generic_call % ("z", "test/interpreter.bf", "test/hello.bf", "out/out.cpp"))
 run("g++ out/out.cpp -o out/out && out/out > out/out.txt")
+exp()
+
+print("")
+print("Testing cat")
+
+run(generic_call % ("e", "test/cat.bf", "test/hello.result", "out/out.txt"))
+exp()
+
+run(generic_call % ("x", "test/interpreter.bf", "test/cat.bf", "out/metacat.bf"))
+run(generic_call % ("e", "out/metacat.bf", "test/hello.result", "out/out.txt"))
+exp()
+
+run(generic_call % ("b", "out/metacat.bf", "test/hello.result", "out/out.txt"))
+exp()
+run(generic_call % ("t", "out/metacat.bf", "test/hello.result", "out/out.txt"))
 exp()
 

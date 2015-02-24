@@ -20,7 +20,7 @@ using namespace std;
 #define S_LEFT  --ptr
 #define S_RIGHT ++ptr
 #define S_DOT   std::cout << *ptr; std::cout.flush()
-#define S_READ  std::cin >> *ptr
+#define S_READ  std::cin >> noskipws >> *ptr
 #define S_TEST  *ptr != 0
 
 #define S_STORE *ptr =

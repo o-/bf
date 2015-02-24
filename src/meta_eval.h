@@ -48,7 +48,7 @@ class TraceCompileSemantic : public Semantic {
       c->read(p, v);
     } else {
       char in;
-      cin >> in;
+      cin >> noskipws >> in;
       store(in);
     }
   }
